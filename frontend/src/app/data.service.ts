@@ -9,8 +9,10 @@ import { Country } from './interfaces/country.interface';
 
 @Injectable({ providedIn: 'root' })
 export class DataService {
-  private serviceUrl = 'localhost:3000'; // URL to web api
-  private GET_AVERAGES = '/averages';
+  private static serviceUrl = 'http://localhost:8080'; // URL to web api
+  private static GET_AVERAGES = DataService.serviceUrl + '/averages';
+  private static GET_COUNTRIES = DataService.serviceUrl + '/countries';
+  private static GET_CITIES = DataService.serviceUrl + '/cities';
 
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
@@ -20,17 +22,17 @@ export class DataService {
 
   /** GET averages */
   getAverages(): Observable<Averages[]> {
-    const url = `https://api.openaq.org/beta/averages?limit=500`;
+    const url = DataService.GET_AVERAGES;
     return this.http.get<Averages[]>(url);
   }
   /** GET cities */
   getCities(): Observable<City[]> {
-    const url = `https://api.openaq.org/v1/cities?limit=500`;
+    const url = DataService.GET_CITIES;
     return this.http.get<City[]>(url);
   }
-  /** GET cities */
+  /** GET countries */
   getCountries(): Observable<Country[]> {
-    const url = `https://api.openaq.org/v1/countries?limit=500`;
+    const url = DataService.GET_COUNTRIES;
     return this.http.get<Country[]>(url);
   }
 }

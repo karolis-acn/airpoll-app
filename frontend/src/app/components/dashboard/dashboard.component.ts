@@ -31,19 +31,19 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit() {
     this.dataService.getAverages()
-      .subscribe((averages: any) => {
-        this.averages = averages.results;
+      .subscribe((averages: Averages[]) => {
+        this.averages = averages;
         this.dataSource = new MatTableDataSource(this.averages);
       });
 
     this.dataService.getCountries()
-      .subscribe((result: any) => {
-        this.countries = result.results;
+      .subscribe((result: Country[]) => {
+        this.countries = result;
       });
 
     this.dataService.getCities()
-      .subscribe((result: any) => {
-        this.cities = result.results;
+      .subscribe((result: City[]) => {
+        this.cities = result;
       });
   }
 

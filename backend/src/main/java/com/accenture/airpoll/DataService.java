@@ -42,7 +42,7 @@ public class DataService {
   }
 
   public void getAverages() {
-    JSONArray results = getData("https://api.openaq.org/beta/averages?limit=10000");
+    JSONArray results = getData("https://api.openaq.org/beta/averages?limit=1000");
     if (results != null) {
       for (int i = 0; i < results.size(); i++) {
         JSONObject item = (JSONObject) results.get(i);
@@ -63,7 +63,7 @@ public class DataService {
   }
 
   public void getCities() {
-    JSONArray results = getData("https://api.openaq.org/v1/cities?limit=10000");
+    JSONArray results = getData("https://api.openaq.org/v1/cities?limit=1000");
     if (results != null) {
       for (int i = 0; i < results.size(); i++) {
         JSONObject item = (JSONObject) results.get(i);
@@ -78,7 +78,7 @@ public class DataService {
   }
 
   public void getCountries() {
-    JSONArray results = getData("https://api.openaq.org/v1/countries?limit=10000");
+    JSONArray results = getData("https://api.openaq.org/v1/countries?limit=1000");
     if (results != null) {
       for (int i = 0; i < results.size(); i++) {
         JSONObject item = (JSONObject) results.get(i);
@@ -94,7 +94,7 @@ public class DataService {
   }
 
   public void getParameters() {
-    JSONArray results = getData("https://api.openaq.org/v1/parameters?limit=10000");
+    JSONArray results = getData("https://api.openaq.org/v1/parameters?limit=1000");
     if (results != null) {
       for (int i = 0; i < results.size(); i++) {
         JSONObject item = (JSONObject) results.get(i);
@@ -109,7 +109,7 @@ public class DataService {
   }
 
   public void getMeasurements() {
-    JSONArray results = getData("https://api.openaq.org/v1/measurements?limit=10000");
+    JSONArray results = getData("https://api.openaq.org/v1/measurements?limit=1000");
     if (results != null) {
       for (int i = 0; i < results.size(); i++) {
         JSONObject item = (JSONObject) results.get(i);

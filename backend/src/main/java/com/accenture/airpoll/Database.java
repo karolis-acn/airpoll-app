@@ -109,7 +109,6 @@ public class Database {
       // execute insert SQL statement
       prepareState.executeUpdate();
       prepareState.close();
-      System.out.println(city + " added successfully");
     } catch (SQLException e) {
       e.printStackTrace();
     }
@@ -129,7 +128,6 @@ public class Database {
       // execute insert SQL statement
       prepareState.executeUpdate();
       prepareState.close();
-      System.out.println(name + " added successfully");
     } catch (SQLException e) {
       e.printStackTrace();
     }
@@ -150,7 +148,6 @@ public class Database {
       // execute insert SQL statement
       prepareState.executeUpdate();
       prepareState.close();
-      System.out.println(name + " added successfully");
     } catch (SQLException e) {
       e.printStackTrace();
     }
@@ -170,7 +167,6 @@ public class Database {
       // execute insert SQL statement
       prepareState.executeUpdate();
       prepareState.close();
-      System.out.println(name + " added successfully");
     } catch (SQLException e) {
       e.printStackTrace();
     }
@@ -195,7 +191,6 @@ public class Database {
       // execute insert SQL statement
       prepareState.executeUpdate();
       prepareState.close();
-      System.out.println(city + " added successfully");
     } catch (SQLException e) {
       e.printStackTrace();
     }
