@@ -16,7 +16,9 @@ import { MatNativeDateModule } from  '@angular/material/core';
 import { MatChipsModule } from  '@angular/material/chips';
 import { MatTooltipModule } from  '@angular/material/tooltip';
 import { MatTableModule } from  '@angular/material/table';
-import { MatPaginatorModule } from  '@angular/material/paginator';   
+import { MatPaginatorModule } from  '@angular/material/paginator';
+import {MatSelectInfiniteScrollModule} from 'ng-mat-select-infinite-scroll';
+import { MatSortModule } from '@angular/material/sort';
 
 @NgModule({
    imports: [
@@ -37,7 +39,9 @@ import { MatPaginatorModule } from  '@angular/material/paginator';
       MatChipsModule,
       MatTooltipModule,
       MatTableModule,
-      MatPaginatorModule
+      MatSortModule,
+      MatPaginatorModule,
+      MatSelectInfiniteScrollModule,
    ],
    exports: [
       MatButtonModule,
@@ -55,7 +59,9 @@ import { MatPaginatorModule } from  '@angular/material/paginator';
       MatChipsModule,
       MatTooltipModule,
       MatTableModule,
-      MatPaginatorModule
+      MatSortModule,
+      MatPaginatorModule,
+      MatSelectInfiniteScrollModule,
    ],
    providers: [
       MatDatepickerModule,

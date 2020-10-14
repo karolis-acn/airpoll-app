@@ -1,2 +1,55 @@
+<form>
+  <mat-form-field appearance="fill">
+    <mat-label>Filer by country</mat-label>
+    <mat-select [(value)]="selectedCountry"  (selectionChange)="selectCountry($event)" name="country" >
+      <mat-option *ngFor="let data of countries" [value]="data">
+        <img src="https://cdn.jsdelivr.net/npm/flag-icons@2.0.0/flags/flags-iso/shiny/32/{{data.code}}.png"/> {{data.name}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Filter by city</mat-label>
+    <mat-select [(value)]="selectedCity" name="city"  [disabled]="selectedCountry === undefined">
+      <mat-option *ngFor="let data of citiesFiltered" [value]="data">
+        {{data.city}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+</form>
 
-<img src="../../../assets/banner.png" class="bg">
+
+<table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort (matSortChange)="sortData($event)" >
+  
+  <ng-container matColumnDef="location">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> Location </th>
+    <td mat-cell *matCellDef="let data"> {{data.location}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="city">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> City </th>
+    <td mat-cell *matCellDef="let data"> {{data.city}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="country">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> Country </th>
+    <td mat-cell *matCellDef="let data"> {{data.country}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="average">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> Average </th>
+    <td mat-cell *matCellDef="let data"> {{data.average}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="parameter">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> Parameter </th>
+    <td mat-cell *matCellDef="let data"> {{data.parameter}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="date">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> Date </th>
+    <td mat-cell *matCellDef="let data"> {{data.date}} </td>
+  </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let data; columns: displayedColumns"></tr>
+</table>
