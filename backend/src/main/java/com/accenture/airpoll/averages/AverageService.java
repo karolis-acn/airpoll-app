@@ -17,8 +17,9 @@ public class AverageService {
   @Autowired
   private AverageRepository repository;
 
-  public List<Average> listAll(Integer pageNo, Integer pageSize, String sortBy) {
-    Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
+  public List<Average> listAll(Integer pageNo, Integer pageSize, String sortBy, Integer sortOrder) {
+    Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(
+        sortOrder == 1 ? Sort.Direction.DESC : Sort.Direction.ASC, sortBy));
     Page<Average> pagedResult = repository.findAll(paging);
     
     if (pagedResult.hasContent()) {
