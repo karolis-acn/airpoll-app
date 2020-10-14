@@ -21,8 +21,8 @@ export class DataService {
   constructor(private http: HttpClient) {}
 
   /** GET averages */
-  getAverages(): Observable<Averages[]> {
-    const url = DataService.GET_AVERAGES;
+  getAverages(page: number): Observable<Averages[]> {
+    const url = DataService.GET_AVERAGES + '?pageNo=' + page;
     return this.http.get<Averages[]>(url);
   }
   /** GET cities */
