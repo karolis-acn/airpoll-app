@@ -1,6 +1,6 @@
 package com.accenture.airpoll.averages;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.PagingAndSortingRepository;
 
-public interface AverageRepository extends JpaRepository<Average, String> {
+public interface AverageRepository extends PagingAndSortingRepository<Average, String> {
 }

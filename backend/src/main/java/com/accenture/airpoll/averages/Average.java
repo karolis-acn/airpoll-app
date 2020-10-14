@@ -8,6 +8,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "averages")
 public class Average {
+
   @Id
   @Column(name = "location")
   private String location;
