@@ -114,6 +114,47 @@ public class Database {
     }
   }
 
+  public static void queryPopulateCountry(String country){
+    
+    try {
+      String updateQueryStatement = "UPDATE countries SET populated=1 WHERE code = ?";
+
+      PreparedStatement prepareState = conn.prepareStatement(updateQueryStatement);
+      prepareState.setString(1, country);
+
+      // execute insert SQL statement
+      prepareState.executeUpdate();
+      prepareState.close();
+
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+  }
+
+  public static boolean queryCheckCitiesByCountry(String country){
+    try {
+      String insertQueryStatement = "SELECT populated FROM countries WHERE code = ?";
+
+      PreparedStatement prepareState = conn.prepareStatement(insertQueryStatement);
+      prepareState.setString(1, country);
+
+      // execute insert SQL statement
+      prepareState.executeQuery();
+      prepareState.close();
+
+      ResultSet resultSet = prepareState.getResultSet();
+      if (resultSet != null && resultSet.next()) {
+        System.out.println("!");
+         return resultSet.getBoolean("populated");
+      }
+
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+
+    return false;
+  }
+
   public static void queryPopulateCities(String name, String country, Long count, Long locations) {
 
     try {
@@ -124,6 +165,7 @@ public class Database {
       prepareState.setString(2, country);
       prepareState.setLong(3, count);
       prepareState.setLong(4, locations);
+      System.out.println(name);
 
       // execute insert SQL statement
       prepareState.executeUpdate();

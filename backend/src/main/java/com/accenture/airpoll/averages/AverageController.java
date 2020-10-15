@@ -25,7 +25,7 @@ public class AverageController {
     @RequestParam(defaultValue = "0") Integer pageNo,
     @RequestParam(defaultValue = "50") Integer pageSize, 
     @RequestParam(defaultValue = "city") String sortBy,
-    @RequestParam(defaultValue = "0") Integer sortOrder,
+    @RequestParam String sortOrder,
     @RequestParam String filterCountry,
     @RequestParam String filterCity
   ) {

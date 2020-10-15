@@ -24,7 +24,7 @@ export class DataService {
   getAverages(
     page: number,
     sortBy: string,
-    sortOrder: number,
+    sortOrder: string,
     filterCountry: string = '',
     filterCity: string = ''
   ): Observable<Averages[]> {

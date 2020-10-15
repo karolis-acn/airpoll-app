@@ -19,7 +19,7 @@ export class DashboardComponent implements OnInit {
 
   // sorting
   sortBy = '';
-  sortOrder = 0;
+  sortOrder = '';
 
   // filters
   countries: Country[];
@@ -60,8 +60,8 @@ export class DashboardComponent implements OnInit {
 
   sortData(event){
     this.page = 0;
-    this.sortBy = event.active;
-    this.sortOrder = event.direction === 'asc' ? 0 : 1;
+    this.sortBy = event.direction ? event.active : '';
+    this.sortOrder = event.direction;
     this.isPageLoading = true;
 
     this.getAverages(this.updateAveragesSubscribe());
@@ -69,15 +69,15 @@ export class DashboardComponent implements OnInit {
 
   selectCountry(event: Event){
     delete this.filterCity;
+    delete this.cities;
 
     if(this.filterCountry){
       this.dataService.getCities(this.filterCountry.code)
         .subscribe((result: City[]) => {
           this.cities = result;
         });
-    } else {
-      delete this.cities;
     }
+
     this.getAverages(this.updateAveragesSubscribe());
   }
   selectCity(event: Event){

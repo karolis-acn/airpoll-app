@@ -62,18 +62,22 @@ public class DataService {
     }
   }
 
-  public void getCities() {
-    JSONArray results = getData("https://api.openaq.org/v1/cities?limit=1000");
-    if (results != null) {
-      for (int i = 0; i < results.size(); i++) {
-        JSONObject item = (JSONObject) results.get(i);
-        String name = (String) item.get("name");
-        String country = (String) item.get("country");
-        Long count = (Long) item.get("count");
-        Long locations = (Long) item.get("locations");
+  public void getCities(String filterCountry) {
+    if(!Database.queryCheckCitiesByCountry(filterCountry)){
+      JSONArray results = getData("https://api.openaq.org/v1/cities?limit=1000&country=" + filterCountry);
+      if (results != null) {
+        for (int i = 0; i < results.size(); i++) {
+          JSONObject item = (JSONObject) results.get(i);
+          String name = (String) item.get("name");
+          String country = (String) item.get("country");
+          Long count = (Long) item.get("count");
+          Long locations = (Long) item.get("locations");
 
-        Database.queryPopulateCities(name, country, count, locations);
+          Database.queryPopulateCities(name, country, count, locations);
+        }
       }
+
+      Database.queryPopulateCountry(filterCountry);
     }
   }
 

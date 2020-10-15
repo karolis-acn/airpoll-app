@@ -17,10 +17,25 @@ public class AverageService {
   @Autowired
   private AverageRepository repository;
 
-  public List<Average> listAll(Integer pageNo, Integer pageSize, String sortBy, Integer sortOrder, String filterCountry, String filterCity) {
-    Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(
-        sortOrder == 1 ? Sort.Direction.DESC : Sort.Direction.ASC, sortBy));
+  private Sort getSortOrder(String order, String sortBy){
+    Sort.Direction direction = null;
 
+    if(order.equals("asc")){
+      direction = Sort.Direction.ASC;
+    } else if(order.equals("desc")){
+      direction = Sort.Direction.DESC;
+    }
+
+    if(direction != null){
+      return Sort.by(direction, sortBy);
+    } else {
+      return Sort.by(sortBy);
+    }
+  }
+
+  public List<Average> listAll(Integer pageNo, Integer pageSize, String sortBy, String sortOrder, String filterCountry, String filterCity) {
+
+    Pageable paging = PageRequest.of(pageNo, pageSize, getSortOrder(sortOrder, sortBy));
     Page<Average> pagedResult;
 
     if(filterCountry != ""){

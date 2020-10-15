@@ -12,7 +12,7 @@ public class AirpollApplication {
 
 		DataService dataService = new DataService();
 		dataService.getAverages();
-		dataService.getCities();
+		// dataService.getCities();
 		dataService.getCountries();
 		dataService.getParameters();
 		dataService.getMeasurements();
