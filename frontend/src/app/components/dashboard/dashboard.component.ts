@@ -30,13 +30,15 @@ export class DashboardComponent implements OnInit {
   // table
   averages: Averages[];
   dataSource: MatTableDataSource<any>;
-  displayedColumns: string[] = ['location', 'city', 'country', 'average', 'parameter', 'date'];
+  displayedColumns: string[] = ['location', 'city', 'country', 'average', 'parameter', 'longitude', 'latitude', 'date'];
 
-  constructor(private dataService: DataService) {
+  constructor(private dataService: DataService) {}
 
-  }
+  // Response to loaded data
+  updateAveragesSubscribe(): (averages: Averages[]) => void{
+    this.page = 0;
+    this.isEOL = false;
 
-  updateAveragesSubscribe(){
     return (averages: Averages[]) => {
         this.averages = averages;
         this.dataSource = new MatTableDataSource(this.averages);
@@ -44,7 +46,8 @@ export class DashboardComponent implements OnInit {
     }
   }
 
-  getAverages(subscribe: (averages: Averages[]) => void){
+  // Load average pollution data
+  getAverages(subscribe: (averages: Averages[]) => void): void{
     this.dataService.getAverages(this.page, this.sortBy, this.sortOrder, this.filterCountry?.code, this.filterCity?.name)
       .subscribe(subscribe);
   }
@@ -58,7 +61,8 @@ export class DashboardComponent implements OnInit {
       });
   }
 
-  sortData(event){
+  // Load new sorted data
+  sortData(event): void{
     this.page = 0;
     this.sortBy = event.direction ? event.active : '';
     this.sortOrder = event.direction;
@@ -67,9 +71,14 @@ export class DashboardComponent implements OnInit {
     this.getAverages(this.updateAveragesSubscribe());
   }
 
-  selectCountry(event: Event){
+  // Select country and load cities list
+  selectCountry(selectedCountry?: string): void{
     delete this.filterCity;
     delete this.cities;
+
+    if(selectedCountry){
+      this.filterCountry = this.countries?.find(country => country.code === selectedCountry);
+    }
 
     if(this.filterCountry){
       this.dataService.getCities(this.filterCountry.code)
@@ -80,14 +89,52 @@ export class DashboardComponent implements OnInit {
 
     this.getAverages(this.updateAveragesSubscribe());
   }
-  selectCity(event: Event){
+
+  // Select city and load new data
+  selectCity(): void{
     this.getAverages(this.updateAveragesSubscribe());
   }
 
+  // Get country name by country code
+  getCountryName(findCountry: string): string{
+    return this.countries?.find(country => country.code === findCountry)?.name || findCountry;
+  }
+
+  // Mark average measurement by color (UK standarts)
+  getAverageColor(value: number){
+    if(value <= 11){
+      return '#cfc';
+    } else if(value <= 23){
+      return '#6f6';
+    } else if(value <= 35){
+      return '#0f0';
+    } else if(value <= 41){
+      return '#9f0';
+    } else if(value <= 47){
+      return '#ff0';
+    } else if(value <= 53){
+      return '#fc0';
+    } else if(value <= 58){
+      return '#f60';
+    } else if(value <= 64){
+      return '#f30';
+    } else if(value <= 70){
+      return '#f00';
+    } else {
+      return '#f06';
+    }
+  }
+
+  // Open map by coordinates to show where it is
+  openMap(longitude: string, latitude: string){
+    window.open(`https://www.openstreetmap.org/?mlat=${latitude}&mlon=${longitude}&zoom=12`, '_blank');
+  }
+
+  // Triggered when table is scrolled to fill more data once bottom of list is reached
   onTableScroll(e) {
-    const tableViewHeight = e.target.offsetHeight // viewport: ~500px
-    const tableScrollHeight = e.target.scrollHeight // length of all table
-    const scrollLocation = e.target.scrollTop; // how far user scrolled
+    const tableViewHeight = e.target.offsetHeight
+    const tableScrollHeight = e.target.scrollHeight
+    const scrollLocation = e.target.scrollTop;
 
     // If the user has scrolled within 500px of the bottom, add more data
     const buffer = 500;
