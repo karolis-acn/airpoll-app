@@ -17,10 +17,21 @@ public class AverageService {
   @Autowired
   private AverageRepository repository;
 
-  public List<Average> listAll(Integer pageNo, Integer pageSize, String sortBy, Integer sortOrder) {
+  public List<Average> listAll(Integer pageNo, Integer pageSize, String sortBy, Integer sortOrder, String filterCountry, String filterCity) {
     Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(
         sortOrder == 1 ? Sort.Direction.DESC : Sort.Direction.ASC, sortBy));
-    Page<Average> pagedResult = repository.findAll(paging);
+
+    Page<Average> pagedResult;
+
+    if(filterCountry != ""){
+      if(filterCity != ""){
+        pagedResult = repository.findByCountryAndCity(filterCountry, filterCity, paging);
+      } else {
+        pagedResult = repository.findByCountry(filterCountry, paging);
+      }
+    } else {
+      pagedResult = repository.findAll(paging);
+    }
     
     if (pagedResult.hasContent()) {
       return pagedResult.getContent();

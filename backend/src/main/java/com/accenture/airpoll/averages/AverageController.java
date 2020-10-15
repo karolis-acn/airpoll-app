@@ -25,9 +25,11 @@ public class AverageController {
     @RequestParam(defaultValue = "0") Integer pageNo,
     @RequestParam(defaultValue = "50") Integer pageSize, 
     @RequestParam(defaultValue = "city") String sortBy,
-    @RequestParam(defaultValue = "0") Integer sortOrder 
+    @RequestParam(defaultValue = "0") Integer sortOrder,
+    @RequestParam String filterCountry,
+    @RequestParam String filterCity
   ) {
-    List<Average> list = service.listAll(pageNo, pageSize, sortBy, sortOrder);
+    List<Average> list = service.listAll(pageNo, pageSize, sortBy, sortOrder, filterCountry, filterCity);
 
     return new ResponseEntity<List<Average>>(list, new HttpHeaders(), HttpStatus.OK);
   }

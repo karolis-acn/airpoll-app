@@ -21,8 +21,15 @@ export class DataService {
   constructor(private http: HttpClient) {}
 
   /** GET averages */
-  getAverages(page: number, sortBy: string, sortOrder: number): Observable<Averages[]> {
-    const url = DataService.GET_AVERAGES + '?pageNo=' + page + '&sortBy=' + sortBy + '&sortOrder=' + sortOrder;
+  getAverages(
+    page: number,
+    sortBy: string,
+    sortOrder: number,
+    filterCountry: string = '',
+    filterCity: string = ''
+  ): Observable<Averages[]> {
+    const url = DataService.GET_AVERAGES + '?pageNo=' + page + '&sortBy=' + sortBy + '&sortOrder=' + sortOrder
+      + '&filterCountry=' + filterCountry + '&filterCity=' + filterCity;
     return this.http.get<Averages[]>(url);
   }
   /** GET cities */

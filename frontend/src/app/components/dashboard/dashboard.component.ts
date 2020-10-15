@@ -25,8 +25,8 @@ export class DashboardComponent implements OnInit {
   countries: Country[];
   cities: City[];
   citiesFiltered: City[];
-  selectedCountry: Country;
-  selectedCity: City;
+  filterCountry: Country;
+  filterCity: City;
 
   // table
   averages: Averages[];
@@ -37,13 +37,21 @@ export class DashboardComponent implements OnInit {
 
   }
 
-  ngOnInit() {
-    this.dataService.getAverages(this.page, this.sortBy, this.sortOrder)
-      .subscribe((averages: Averages[]) => {
+  updateAveragesSubscribe(){
+    return (averages: Averages[]) => {
         this.averages = averages;
         this.dataSource = new MatTableDataSource(this.averages);
         this.isPageLoading = false;
-      });
+    }
+  }
+
+  getAverages(subscribe: (averages: Averages[]) => void){
+    this.dataService.getAverages(this.page, this.sortBy, this.sortOrder, this.filterCountry?.code, this.filterCity?.name)
+      .subscribe(subscribe);
+  }
+
+  ngOnInit() {
+    this.getAverages(this.updateAveragesSubscribe());
 
     this.dataService.getCountries()
       .subscribe((result: Country[]) => {
@@ -57,24 +65,20 @@ export class DashboardComponent implements OnInit {
   }
 
   sortData(event){
-
     this.page = 0;
     this.sortBy = event.active;
     this.sortOrder = event.direction === 'asc' ? 0 : 1;
     this.isPageLoading = true;
 
-    this.dataService.getAverages(this.page, this.sortBy, this.sortOrder)
-    .subscribe((result: Averages[]) => {
-      if(result && result.length){
-        this.dataSource.data = result;
-      }
-      this.isPageLoading = false;
-    });
+    this.getAverages(this.updateAveragesSubscribe());
   }
 
   selectCountry(event: Event){
-    this.citiesFiltered = this.cities.filter(city => city.country === this.selectedCountry.code);
-    console.log(this.citiesFiltered, this.selectedCountry);
+    this.citiesFiltered = this.cities.filter(city => city.country === this.filterCountry.code);
+    this.getAverages(this.updateAveragesSubscribe());
+  }
+  selectCity(event: Event){
+    this.getAverages(this.updateAveragesSubscribe());
   }
 
   onTableScroll(e) {
@@ -89,8 +93,7 @@ export class DashboardComponent implements OnInit {
     if (scrollLocation > limit && !this.isPageLoading && !this.isEOL) {
       this.isPageLoading = true;
       this.page++;
-      this.dataService.getAverages(this.page, this.sortBy, this.sortOrder)
-        .subscribe((result: Averages[]) => {
+      this.getAverages((result: Averages[]) => {
           if(result && result.length){
             this.dataSource.data = this.dataSource.data.concat(result);
           } else {

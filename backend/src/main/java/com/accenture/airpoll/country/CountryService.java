@@ -13,7 +13,7 @@ public class CountryService {
   private CountryRepository countryRepository;
 
   public List<Country> listAll() {
-    return countryRepository.findAll();
+    return countryRepository.findByNameNotNull();
   }
 
   public void saveCountry(Country user) {

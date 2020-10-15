@@ -1,7 +1,7 @@
 <form>
   <mat-form-field appearance="fill">
     <mat-label>Filer by country</mat-label>
-    <mat-select [(value)]="selectedCountry"  (selectionChange)="selectCountry($event)" name="country" >
+    <mat-select [(value)]="filterCountry"  (selectionChange)="selectCountry($event)" name="country" >
       <mat-option *ngFor="let data of countries" [value]="data">
         <img src="https://cdn.jsdelivr.net/npm/flag-icons@2.0.0/flags/flags-iso/shiny/32/{{data.code}}.png"/> {{data.name}}
       </mat-option>
@@ -9,7 +9,7 @@
   </mat-form-field>
   <mat-form-field appearance="fill">
     <mat-label>Filter by city</mat-label>
-    <mat-select [(value)]="selectedCity" name="city"  [disabled]="selectedCountry === undefined">
+    <mat-select [(value)]="filterCity" name="city" (selectionChange)="selectCity($event)"  [disabled]="filterCountry === undefined">
       <mat-option *ngFor="let data of citiesFiltered" [value]="data">
         {{data.name}}
       </mat-option>
