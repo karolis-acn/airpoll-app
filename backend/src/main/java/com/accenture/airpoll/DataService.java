@@ -41,11 +41,17 @@ public class DataService {
     return null;
   }
 
+  private String lastDateAverages = "";
   public boolean getAverages(Integer page) {
-    JSONArray results = getData("https://api.openaq.org/beta/averages?limit=10000&order_by=date&page="+page);
-    System.out.println(page + " page averages");
-    if (results != null && results.size() != 0) {
-      for (int i = 0; i < results.size(); i++) {
+    boolean isNewDate = false;
+
+    JSONArray results = getData("https://api.openaq.org/beta/averages?limit=10000&order_by=date&sort=desc&page="+page+ lastDateAverages);
+    System.out.println("https://api.openaq.org/beta/averages?limit=10000&order_by=date&sort=desc&page=" + page + lastDateAverages);
+    System.out.println(page + " page");
+    if (results != null) {
+
+      int resultsSize = results.size();
+      for (int i = 0; i < resultsSize; i++) {
         JSONObject item = (JSONObject) results.get(i);
         String city = (String) item.get("city");
         String country = (String) item.get("country");
@@ -53,23 +59,26 @@ public class DataService {
         JSONObject coordinates = (JSONObject) item.get("coordinates");
         String date = (String) item.get("date");
         String location = (String) item.get("location");
-        Long measurement_count = (Long) item.get("measurement_count");
+        Long measurements = (Long) item.get("measurement_count");
         String parameter = (String) item.get("parameter");
         String unit = (String) item.get("unit");
 
-        Database.queryPopulateAverages(city, country, average, coordinates, date, location, measurement_count,
+        Database.queryPopulateAverages(city, country, average, coordinates, date, location, measurements,
             parameter, unit);
-        
-        return true;
       }
+      
+      String newDate = "&date_to=" + ((JSONObject) results.get(resultsSize - 1)).get("date");
+      isNewDate = !newDate.equals(lastDateAverages);
+      lastDateAverages = newDate;
     }
-      return false;
+
+    return isNewDate;
   }
 
   public void getCities(String filterCountry) {
     if(!Database.queryCheckCitiesByCountry(filterCountry)){
       JSONArray results = getData("https://api.openaq.org/v1/cities?limit=1000&country=" + filterCountry);
-      if (results != null && results.size() != 0) {
+      if (results != null) {
         for (int i = 0; i < results.size(); i++) {
           JSONObject item = (JSONObject) results.get(i);
           String name = (String) item.get("name");
@@ -87,7 +96,7 @@ public class DataService {
 
   public void getCountries() {
     JSONArray results = getData("https://api.openaq.org/v1/countries?limit=1000");
-    if (results != null && results.size() != 0) {
+    if (results != null) {
       for (int i = 0; i < results.size(); i++) {
         JSONObject item = (JSONObject) results.get(i);
         String code = (String) item.get("code");
@@ -103,7 +112,7 @@ public class DataService {
 
   public void getParameters() {
     JSONArray results = getData("https://api.openaq.org/v1/parameters?limit=1000");
-    if (results != null && results.size() != 0) {
+    if (results != null) {
       for (int i = 0; i < results.size(); i++) {
         JSONObject item = (JSONObject) results.get(i);
         String id = (String) item.get("id");
@@ -118,7 +127,7 @@ public class DataService {
 
   public void getMeasurements() {
     JSONArray results = getData("https://api.openaq.org/v1/measurements?limit=1000");
-    if (results != null && results.size() != 0) {
+    if (results != null) {
       for (int i = 0; i < results.size(); i++) {
         JSONObject item = (JSONObject) results.get(i);
         String city = (String) item.get("city");

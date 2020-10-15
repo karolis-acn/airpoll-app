@@ -24,11 +24,18 @@ public class Average {
   private String parameter;
   @Column(name = "unit")
   private String unit;
+  @Column(name = "latitude")
+  private Double latitude;
+  @Column(name = "longitude")
+  private Double longitude;
+  @Column(name = "measurements")
+  private Integer measurements;
 
   public Average() {
   }
 
-  public Average(String location, String city, String country, Double average, String date, String parameter, String unit) {
+  public Average(String location, String city, String country, Double average, String date, String parameter, String unit, 
+      Double latitude, Double longitude, Integer measurements) {
     this.location = location;
     this.city = city;
     this.country = country;
@@ -36,6 +43,9 @@ public class Average {
     this.date = date;
     this.parameter = parameter;
     this.unit = unit;
+    this.latitude = latitude;
+    this.longitude = longitude;
+    this.measurements = measurements;
   }
 
   public String getLocation() {
@@ -64,5 +74,17 @@ public class Average {
 
   public String getUnit() {
     return unit;
+  }
+
+  public Double getLongitude() {
+    return longitude;
+  }
+
+  public Double getLatitude() {
+    return latitude;
+  }
+
+  public Integer getMeasurements() {
+    return measurements;
   }
 }

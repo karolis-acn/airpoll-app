@@ -45,74 +45,39 @@ public class Database {
     }
   }
 
-  private static int getCoordinatesId(Double longitude, Double latitude){
-    try {
-      String selectIdQueryStatement = "SELECT id FROM coordinates WHERE longitude = " + longitude + " AND latitude = " + latitude;
-      PreparedStatement prepareStateID = conn.prepareStatement(selectIdQueryStatement);
-      prepareStateID.executeQuery();
-      ResultSet resultSetCoords = prepareStateID.getResultSet();
-      if (resultSetCoords != null && resultSetCoords.next()) {
-        return resultSetCoords.getInt("id");
-      }
-      prepareStateID.close();
-    } catch (SQLException e) {
-      e.printStackTrace();
-    }
-    return 0;
-  }
-
-  public static int queryPopulateCoordinates (JSONObject coordinates){
-    Integer coordinatesId = 0;
-    Double longitude;
-    Double latitude;
+  public static Double[] getCoordinates (JSONObject coordinates){
+    Double longitude = Double.valueOf(0);
+    Double latitude = Double.valueOf(0);
 
     try {
         longitude = Double.valueOf(coordinates.get("longitude").toString());
         latitude = Double.valueOf(coordinates.get("latitude").toString());
-        coordinatesId = getCoordinatesId(longitude, latitude);
     } catch (NullPointerException e) {
       e.printStackTrace();
-      return 0;
     }
 
-    if(coordinatesId == 0){
-      try {
-
-        // insert coordinates
-        String insertQueryStatement = "INSERT INTO coordinates (longitude, latitude) VALUES (?,?)";
-
-        PreparedStatement prepareState = conn.prepareStatement(insertQueryStatement);
-        prepareState.setDouble(1, longitude);
-        prepareState.setDouble(2, latitude);
-        prepareState.executeUpdate();
-        prepareState.close();
-        
-        return getCoordinatesId(longitude, latitude);
-      } catch (SQLException e) {
-        e.printStackTrace();
-      }
-    }
-    return coordinatesId;
+    return new Double[] {longitude, latitude };
   }
   
   public static void queryPopulateAverages(String city, String country, Double average, JSONObject coordinates,
-      String date, String location, Long measurement_count, String parameter, String unit) {
+      String date, String location, Long measurements, String parameter, String unit) {
 
     try {
-      Integer coordinatesId = queryPopulateCoordinates(coordinates);
+      Double[] coords = getCoordinates(coordinates);
 
-      String insertQueryStatement = "INSERT IGNORE INTO averages (city, country, average, coordinates, date, location, measurement_count, parameter, unit) VALUES  (?,?,?,?,?,?,?,?,?)";
+      String insertQueryStatement = "REPLACE INTO averages (city, country, average, longitude, latitude, date, location, measurements, parameter, unit) VALUES (?,?,?,?,?,?,?,?,?,?)";
 
       PreparedStatement prepareState = conn.prepareStatement(insertQueryStatement);
       prepareState.setString(1, city);
       prepareState.setString(2, country);
       prepareState.setDouble(3, average);
-      prepareState.setInt(4, coordinatesId);
-      prepareState.setString(5, date);
-      prepareState.setString(6, location);
-      prepareState.setLong(7, measurement_count);
-      prepareState.setString(8, parameter);
-      prepareState.setString(9, unit);
+      prepareState.setDouble(4, coords[0]);
+      prepareState.setDouble(5, coords[1]);
+      prepareState.setString(6, date);
+      prepareState.setString(7, location);
+      prepareState.setLong(8, measurements);
+      prepareState.setString(9, parameter);
+      prepareState.setString(10, unit);
 
       // execute insert SQL statement
       prepareState.executeUpdate();
@@ -226,18 +191,20 @@ public class Database {
   public static void queryPopulateMeasurements(String city, JSONObject coordinates, String country, String location, String parameter, String unit, Double value) {
 
     try {
-      Integer coordinatesId = queryPopulateCoordinates(coordinates);
+      
+      Double[] coords = getCoordinates(coordinates);
 
-      String insertQueryStatement = "REPLACE INTO measurements (city, coordinates, country, location, parameter, unit, value) VALUES  (?,?,?,?,?,?,?)";
+      String insertQueryStatement = "REPLACE INTO measurements (city, longitude, latitude, country, location, parameter, unit, value) VALUES  (?,?,?,?,?,?,?,?)";
 
       PreparedStatement prepareState = conn.prepareStatement(insertQueryStatement);
       prepareState.setString(1, city);
-      prepareState.setLong(2, coordinatesId);
-      prepareState.setString(3, country);
-      prepareState.setString(4, location);
-      prepareState.setString(5, parameter);
-      prepareState.setString(6, unit);
-      prepareState.setDouble(7, value);
+      prepareState.setDouble(2, coords[0]);
+      prepareState.setDouble(3, coords[1]);
+      prepareState.setString(4, country);
+      prepareState.setString(5, location);
+      prepareState.setString(6, parameter);
+      prepareState.setString(7, unit);
+      prepareState.setDouble(8, value);
 
       // execute insert SQL statement
       prepareState.executeUpdate();
