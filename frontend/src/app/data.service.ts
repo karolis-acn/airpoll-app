@@ -20,7 +20,7 @@ export class DataService {
 
   constructor(private http: HttpClient) {}
 
-  /** GET averages */
+  /** GET averages sorted filtered & paged */
   getAverages(
     page: number,
     sortBy: string,
@@ -32,9 +32,9 @@ export class DataService {
       + '&filterCountry=' + filterCountry + '&filterCity=' + filterCity;
     return this.http.get<Averages[]>(url);
   }
-  /** GET cities */
-  getCities(): Observable<City[]> {
-    const url = DataService.GET_CITIES;
+  /** GET cities by country */
+  getCities(country: string): Observable<City[]> {
+    const url = DataService.GET_CITIES + '?country=' + country;
     return this.http.get<City[]>(url);
   }
   /** GET countries */

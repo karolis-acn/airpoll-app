@@ -24,7 +24,6 @@ export class DashboardComponent implements OnInit {
   // filters
   countries: Country[];
   cities: City[];
-  citiesFiltered: City[];
   filterCountry: Country;
   filterCity: City;
 
@@ -57,11 +56,6 @@ export class DashboardComponent implements OnInit {
       .subscribe((result: Country[]) => {
         this.countries = result;
       });
-
-    this.dataService.getCities()
-      .subscribe((result: City[]) => {
-        this.cities = result;
-      });
   }
 
   sortData(event){
@@ -74,7 +68,16 @@ export class DashboardComponent implements OnInit {
   }
 
   selectCountry(event: Event){
-    this.citiesFiltered = this.cities.filter(city => city.country === this.filterCountry.code);
+    delete this.filterCity;
+
+    if(this.filterCountry){
+      this.dataService.getCities(this.filterCountry.code)
+        .subscribe((result: City[]) => {
+          this.cities = result;
+        });
+    } else {
+      delete this.cities;
+    }
     this.getAverages(this.updateAveragesSubscribe());
   }
   selectCity(event: Event){
