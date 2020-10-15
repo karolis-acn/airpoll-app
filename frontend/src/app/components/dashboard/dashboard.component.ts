@@ -54,7 +54,7 @@ export class DashboardComponent implements OnInit {
 
     this.dataService.getCountries()
       .subscribe((result: Country[]) => {
-        this.countries = result;
+        this.countries = result.sort((a,b) => a.name.localeCompare(b.name));
       });
   }
 
@@ -74,7 +74,7 @@ export class DashboardComponent implements OnInit {
     if(this.filterCountry){
       this.dataService.getCities(this.filterCountry.code)
         .subscribe((result: City[]) => {
-          this.cities = result;
+          this.cities = result.sort((a,b) => a.name.localeCompare(b.name));
         });
     }
 

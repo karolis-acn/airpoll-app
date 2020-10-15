@@ -11,11 +11,16 @@ public class AirpollApplication {
 		Database.connection();
 
 		DataService dataService = new DataService();
-		dataService.getAverages();
 		// dataService.getCities();
 		dataService.getCountries();
 		dataService.getParameters();
-		dataService.getMeasurements();
+		//dataService.getMeasurements();
+		boolean moreAverages = true;
+		Integer page = 1;
+		while(moreAverages){
+			moreAverages = dataService.getAverages(page);
+			page++;
+		}
 	}
 
 }

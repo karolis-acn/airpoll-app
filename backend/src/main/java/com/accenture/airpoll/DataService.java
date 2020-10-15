@@ -41,9 +41,10 @@ public class DataService {
     return null;
   }
 
-  public void getAverages() {
-    JSONArray results = getData("https://api.openaq.org/beta/averages?limit=1000");
-    if (results != null) {
+  public boolean getAverages(Integer page) {
+    JSONArray results = getData("https://api.openaq.org/beta/averages?limit=10000&order_by=date&page="+page);
+    System.out.println(page + " page averages");
+    if (results != null && results.size() != 0) {
       for (int i = 0; i < results.size(); i++) {
         JSONObject item = (JSONObject) results.get(i);
         String city = (String) item.get("city");
@@ -58,14 +59,17 @@ public class DataService {
 
         Database.queryPopulateAverages(city, country, average, coordinates, date, location, measurement_count,
             parameter, unit);
+        
+        return true;
       }
     }
+      return false;
   }
 
   public void getCities(String filterCountry) {
     if(!Database.queryCheckCitiesByCountry(filterCountry)){
       JSONArray results = getData("https://api.openaq.org/v1/cities?limit=1000&country=" + filterCountry);
-      if (results != null) {
+      if (results != null && results.size() != 0) {
         for (int i = 0; i < results.size(); i++) {
           JSONObject item = (JSONObject) results.get(i);
           String name = (String) item.get("name");
@@ -83,7 +87,7 @@ public class DataService {
 
   public void getCountries() {
     JSONArray results = getData("https://api.openaq.org/v1/countries?limit=1000");
-    if (results != null) {
+    if (results != null && results.size() != 0) {
       for (int i = 0; i < results.size(); i++) {
         JSONObject item = (JSONObject) results.get(i);
         String code = (String) item.get("code");
@@ -99,7 +103,7 @@ public class DataService {
 
   public void getParameters() {
     JSONArray results = getData("https://api.openaq.org/v1/parameters?limit=1000");
-    if (results != null) {
+    if (results != null && results.size() != 0) {
       for (int i = 0; i < results.size(); i++) {
         JSONObject item = (JSONObject) results.get(i);
         String id = (String) item.get("id");
@@ -114,7 +118,7 @@ public class DataService {
 
   public void getMeasurements() {
     JSONArray results = getData("https://api.openaq.org/v1/measurements?limit=1000");
-    if (results != null) {
+    if (results != null && results.size() != 0) {
       for (int i = 0; i < results.size(); i++) {
         JSONObject item = (JSONObject) results.get(i);
         String city = (String) item.get("city");

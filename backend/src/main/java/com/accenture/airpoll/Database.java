@@ -12,7 +12,6 @@ public class Database {
   static Connection conn = null;
 
   public static void connection() {
-
     try {
       Class.forName("com.mysql.jdbc.Driver");
       System.out.println("Congrats - Seems your MySQL JDBC Driver Registered!");
@@ -34,6 +33,15 @@ public class Database {
       System.out.println("MySQL Connection Failed!");
       e.printStackTrace();
       return;
+    }
+  }
+
+  public static void close() {
+    try {
+      conn.close();
+    } catch (SQLException e) {
+      System.out.println("MySQL Connection Close Failed!");
+      e.printStackTrace();
     }
   }
 
@@ -93,7 +101,7 @@ public class Database {
     try {
       Integer coordinatesId = queryPopulateCoordinates(coordinates);
 
-      String insertQueryStatement = "REPLACE INTO averages (city, country, average, coordinates, date, location, measurement_count, parameter, unit) VALUES  (?,?,?,?,?,?,?,?,?)";
+      String insertQueryStatement = "INSERT IGNORE INTO averages (city, country, average, coordinates, date, location, measurement_count, parameter, unit) VALUES  (?,?,?,?,?,?,?,?,?)";
 
       PreparedStatement prepareState = conn.prepareStatement(insertQueryStatement);
       prepareState.setString(1, city);
@@ -138,15 +146,15 @@ public class Database {
       PreparedStatement prepareState = conn.prepareStatement(insertQueryStatement);
       prepareState.setString(1, country);
 
-      // execute insert SQL statement
-      prepareState.executeQuery();
-      prepareState.close();
-
       ResultSet resultSet = prepareState.getResultSet();
       if (resultSet != null && resultSet.next()) {
         System.out.println("!");
          return resultSet.getBoolean("populated");
       }
+
+      // execute insert SQL statement
+      prepareState.executeQuery();
+      prepareState.close();
 
     } catch (SQLException e) {
       e.printStackTrace();
@@ -178,9 +186,10 @@ public class Database {
   public static void queryPopulateCountries(String code, String name, Long count, Long cities, Long locations) {
 
     try {
-      String insertQueryStatement = "REPLACE INTO countries (code, name, count, cities, locations) VALUES  (?,?,?,?,?)";
+      String insertQueryStatement = "REPLACE INTO countries (code, name, count, cities, locations) VALUES (?,?,?,?,?)";
 
       PreparedStatement prepareState = conn.prepareStatement(insertQueryStatement);
+      // INSERT NEW COUNTRY
       prepareState.setString(1, code);
       prepareState.setString(2, name);
       prepareState.setLong(3, count);
