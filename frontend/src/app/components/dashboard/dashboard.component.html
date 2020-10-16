@@ -46,7 +46,7 @@
 
     <ng-container matColumnDef="average">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Average </th>
-      <td mat-cell *matCellDef="let data" [style.background-color]="getAverageColor(data.average)"> {{ (data.average  | number:'1.0-0') +  data.unit }} </td>
+      <td mat-cell *matCellDef="let data" [style.background-color]="getAverageColor(data.average)"> {{ (data.average | number:'1.0-0') +  data.unit }} </td>
     </ng-container>
 
     <ng-container matColumnDef="parameter">
