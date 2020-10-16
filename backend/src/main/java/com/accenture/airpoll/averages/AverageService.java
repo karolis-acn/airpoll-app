@@ -8,7 +8,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 @Service
@@ -51,7 +51,7 @@ public class AverageService {
     if (pagedResult.hasContent()) {
       return pagedResult.getContent();
     } else {
-      return new ArrayList<Average>();
+      return new LinkedList<Average>();
     }
   }
 }

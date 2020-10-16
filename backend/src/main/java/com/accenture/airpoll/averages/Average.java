@@ -10,6 +10,8 @@ import javax.persistence.Table;
 public class Average {
 
   @Id
+  @Column(name = "id")
+  private Integer id;
   @Column(name = "location")
   private String location;
   @Column(name = "city")
@@ -34,8 +36,9 @@ public class Average {
   public Average() {
   }
 
-  public Average(String location, String city, String country, Double average, String date, String parameter, String unit, 
+  public Average(Integer id, String location, String city, String country, Double average, String date, String parameter, String unit, 
       Double latitude, Double longitude, Integer measurements) {
+    this.id = id;
     this.location = location;
     this.city = city;
     this.country = country;
@@ -46,6 +49,10 @@ public class Average {
     this.latitude = latitude;
     this.longitude = longitude;
     this.measurements = measurements;
+  }
+
+  public Integer getId() {
+    return id;
   }
 
   public String getLocation() {

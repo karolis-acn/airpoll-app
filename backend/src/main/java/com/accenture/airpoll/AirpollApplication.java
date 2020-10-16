@@ -17,7 +17,7 @@ public class AirpollApplication {
 	 // dataService.getCities();
 		dataService.getCountries();
 		dataService.getParameters();
-		dataService.getMeasurements();
+	//	dataService.getMeasurements();
 		boolean moreAverages = true;
 		Integer page = 1;
 		while(moreAverages){

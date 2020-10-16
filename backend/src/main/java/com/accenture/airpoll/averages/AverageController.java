@@ -23,9 +23,9 @@ public class AverageController {
   @GetMapping("")
   public ResponseEntity<List<Average>> list(
     @RequestParam(defaultValue = "0") Integer pageNo,
-    @RequestParam(defaultValue = "50") Integer pageSize, 
-    @RequestParam(defaultValue = "city") String sortBy,
-    @RequestParam String sortOrder,
+    @RequestParam(defaultValue = "30") Integer pageSize, 
+    @RequestParam(defaultValue = "date") String sortBy,
+    @RequestParam(defaultValue = "desc") String sortOrder,
     @RequestParam String filterCountry,
     @RequestParam String filterCity
   ) {

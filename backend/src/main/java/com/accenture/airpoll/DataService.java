@@ -45,8 +45,8 @@ public class DataService {
   public boolean getAverages(Integer page) {
     boolean isNewDate = false;
 
-    JSONArray results = getData("https://api.openaq.org/beta/averages?limit=10000&order_by=date&sort=desc&page="+page+ lastDateAverages);
-    System.out.println("https://api.openaq.org/beta/averages?limit=10000&order_by=date&sort=desc&page=" + page + lastDateAverages);
+    JSONArray results = getData("https://api.openaq.org/beta/averages?limit=1000&order_by=date&sort=desc&page="+page+ lastDateAverages);
+    System.out.println("https://api.openaq.org/beta/averages?limit=1000&order_by=date&sort=desc&page=" + page + lastDateAverages);
     System.out.println(page + " page");
     if (results != null) {
 
